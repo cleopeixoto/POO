@@ -29,10 +29,12 @@ public Tabuleiro(String s,ListaImagens l) {
     layeredPane.setPreferredSize(boardSize);
     layeredPane.addMouseListener(this);
     layeredPane.addMouseMotionListener(this);
+    addMouseListener(this);
+
     
     // Tabuleiro para o xadrez
     ExPanel Board = new ExPanel(l);
-    layeredPane.add(Board, JLayeredPane.DEFAULT_LAYER);
+ //   layeredPane.add(Board, JLayeredPane.DEFAULT_LAYER);
     Board.setLayout(new GridLayout(800,800));
     Board.setPreferredSize( boardSize );
     Toolkit tk=Toolkit.getDefaultToolkit();
