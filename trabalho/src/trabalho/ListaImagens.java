@@ -7,7 +7,6 @@ public class ListaImagens {
 	
 
 	private Image img;
-	private int tam;
 	private static Image[] imBranca = new Image[6]; // tipos de pecas :   0 - Torre , 1 - Cavalo , 2 - Bispo , 3 - Rei , 4 - Rainha , 5 - Peao
 	private static Image[] imPreta= new Image[6]; 
 	public ListaImagens() {
