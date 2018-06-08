@@ -1,10 +1,17 @@
 package model;
 
-public class Pecas {
+import java.awt.Image;
+
+public abstract class Pecas {
 	public static final int preto = 0;
 	public static final int branco = 1;
 	protected int lin, col;
 	protected int cor;
+	protected Image img;
+	
+	public abstract TipoPeca getTipo();
+	  
+	public abstract boolean Movimento(int PecaLin, int PecaCol, Tabuleiro board);
 	
 	
 	int getLin() {
@@ -20,9 +27,16 @@ public class Pecas {
 		return this.cor;
 	}
 	
-	void moveTo(int row, int col) {
-		
+	public Image getImage() {
+		return this.img;
 	}
+	
+	public void Mover(int linNova, int colNova) {
+		this.lin = linNova;
+		this.col = colNova;
+	}
+	
+
 	
 	
 }

@@ -1,5 +1,10 @@
 package model;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class Rainha extends Pecas{
 	
 	public Rainha(int PecaLin, int PecaCol, int PecaCor)
@@ -7,13 +12,27 @@ public class Rainha extends Pecas{
 		lin = PecaLin;
 		col = PecaCol;
 		cor = PecaCor;
+		try {
+			
+			if (cor == 1) {
+				img = ImageIO.read(new File("Imagens/CyanQ.png"));
+			}
+			else {
+				img = ImageIO.read(new File("Imagens/PurpleQ.png"));
+			}
+			
+		}
+		catch(IOException e) {
+			System.out.println(e.getMessage());
+			System.exit(1);
+		}
 	}
 	
 	 public boolean Movimento(int PecaLin, int PecaCol, Tabuleiro board) {
 		 return true;
 	 }
 	 
-	 public TipoPeca getType() {
+	 public TipoPeca getTipo() {
 		 
 		return TipoPeca.Rainha;
 	 }
