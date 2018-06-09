@@ -19,7 +19,9 @@ public class Torre extends Pecas {
 				img = ImageIO.read(new File("Imagens/CyanR.png"));
 			}
 			else {
+				
 				img = ImageIO.read(new File("Imagens/PurpleR.png"));
+				
 			}
 		}
 		catch(IOException e) {

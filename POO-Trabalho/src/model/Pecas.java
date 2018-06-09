@@ -14,16 +14,16 @@ public abstract class Pecas {
 	public abstract boolean Movimento(int PecaLin, int PecaCol, Tabuleiro board);
 	
 	
-	int getLin() {
+	public int getLin() {
 		return this.lin;
 	}
 	
-	int getCol() {
+	public int getCol() {
 		return this.col;
 		
 	}
 	
-	int getColor() {
+	public int getColor() {
 		return this.cor;
 	}
 	

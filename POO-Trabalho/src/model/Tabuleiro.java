@@ -7,9 +7,9 @@ public class Tabuleiro {
 	
 	public Tabuleiro()
 	{
-			for(int i = 0; i < tabuleiro.length; i++)
+			for(int i = 0; i < Tam_Tabuleiro; i++)
 			{
-				for(int j = 0; j <tabuleiro[0].length; j++){
+				for(int j = 0; j <Tam_Tabuleiro; j++){
 		                tabuleiro[i][j] = null;
 		        }
 		     }
@@ -18,7 +18,7 @@ public class Tabuleiro {
 	}
 	
 	 private void InicializaPecas() {
-		 // Posiciona as Pecass do xadrez
+		 // Posiciona as Pecas do xadrez
 		 
 		    addPeca(new Torre(0,0,Pecas.branco));
 		    addPeca(new Torre(7,0,Pecas.branco));
@@ -41,7 +41,7 @@ public class Tabuleiro {
 		    
 		    addPeca(new Rei(4,0,Pecas.branco));
 		    addPeca(new Rei(4,7,Pecas.preto));         
-         
+      
 	        for(int i=0; i<8; i++){
 	            addPeca(new Peao(i,1,Pecas.branco));
 	        }
@@ -72,7 +72,7 @@ public class Tabuleiro {
 		tabuleiro[lin][col] = null;
 		return;
 	}
-
+	
 
 }
 
