@@ -11,7 +11,7 @@ public abstract class Pecas {
 	
 	public abstract TipoPeca getTipo();
 	  
-	public abstract boolean Movimento(int PecaLin, int PecaCol, Tabuleiro board);
+	public abstract boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro);
 	
 	
 	public int getLin() {

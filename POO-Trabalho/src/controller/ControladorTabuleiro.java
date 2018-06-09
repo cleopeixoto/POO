@@ -73,7 +73,7 @@ public class ControladorTabuleiro  implements MouseListener {
 			System.out.println("click valido , numero click "+ numClick);
 			numClick = 0;
 			
-			// localizacao da nova posica da peca
+			// localizacao da nova posicao da peca
 			
 			pecaPrimeiroClick = tabuleiro.LocalizaPeca(velhoX, velhoY);
 			System.out.println("peca apertada1 = "+pecaPrimeiroClick.getTipo()+ " 1 = branco ["+velhoX+"]["+velhoY+"]");
@@ -86,6 +86,8 @@ public class ControladorTabuleiro  implements MouseListener {
 				frame.painelTabuleiro.repaint();
 				System.out.println("peca movida1 = "+pecaPrimeiroClick.getTipo()+ " 1 = branco ["+posX+"]["+posY+"]");
 			}
+			
+			// se a peca percorrer uma posicao nao vazia, tem q testar o movimento e o peao precisa saber se e o primeiro movimento ou nao
 			
 		}
 					

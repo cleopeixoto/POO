@@ -72,7 +72,13 @@ public class Tabuleiro {
 		tabuleiro[lin][col] = null;
 		return;
 	}
-	
+	public boolean posicaoOcupada(int lin, int col) {
+		if (tabuleiro[lin][col] == null)
+			return false;
+		else
+			return true;
+		
+	}
 
 }
 
