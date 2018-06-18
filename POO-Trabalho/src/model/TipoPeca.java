@@ -1,6 +1,5 @@
 package model;
 
-
 public enum TipoPeca {
 	Rei,
 	Rainha,
@@ -9,4 +8,3 @@ public enum TipoPeca {
 	Bispo,
 	Peao
 }
-

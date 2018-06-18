@@ -1,6 +1,7 @@
 package controller;
 
 import model.Pecas;
+
 import model.Bispo;
 import model.Rainha;
 import model.Rei;
@@ -17,11 +18,15 @@ import view.TabuleiroPainel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JFrame;
+
 //import java.util.Observable;
 //import java.util.Observer;
 
-public class ControladorTabuleiro  implements MouseListener {
+@SuppressWarnings("serial")
+public class ControladorTabuleiro extends JFrame implements MouseListener {
 	
+	public TabuleiroPainel painelTabuleiro;
 	private TabuleiroFrame frame;
 	Tabuleiro tabuleiro;
 	
@@ -29,19 +34,29 @@ public class ControladorTabuleiro  implements MouseListener {
 	private int posX, posY, velhoX, velhoY;
 	private int numClick = 0;
 	public Pecas pecaPrimeiroClick,pecaSegundoClick;
-	// controlador cria o tabuleiro e a frame
-	public ControladorTabuleiro() {
-		
-	tabuleiro = new Tabuleiro();
-	frame = new TabuleiroFrame(tabuleiro);
-	frame.pack();
-	frame.setResizable(true);
-	frame.setLocationRelativeTo( null );
-	frame.setVisible(true);	
-	frame.addMouseListener(this);
 	
+	public static void main(String[] args) {
+		new ControladorTabuleiro();
+		//new Jogo();
+		
+		
 	}
 
+	public ControladorTabuleiro() {
+		tabuleiro = new Tabuleiro();
+		
+		frame = new TabuleiroFrame (tabuleiro);
+		frame.pack();
+		frame.setDefaultCloseOperation (EXIT_ON_CLOSE);		// sair ao fechar		
+//		frame.setResizable(true);							// definir tamanho da tela
+//		frame.setSize(800,800);								// definir o tamanho da tela 800x800
+		frame.setLocationRelativeTo (null);					// pra ficar centralizado
+		frame.setVisible(true);								// pra ficar visivel
+		frame.setLayout(null);								// sem layout na janela
+		frame.addMouseListener(this);						// evento do mouse
+		
+	}
+	
 	
 	public void mouseClicked(MouseEvent e) {
 		
@@ -68,7 +83,7 @@ public class ControladorTabuleiro  implements MouseListener {
 			velhoY = posY;
 			System.out.println( " velhoX " + velhoX + " velhoY " + velhoY );
 		}		
-		if (numClick == 1 && tabuleiro.LocalizaPeca(posX, posY)== null ) {
+		else if (numClick == 1 && tabuleiro.LocalizaPeca(posX, posY)== null ) {
 			
 			System.out.println("click valido , numero click "+ numClick);
 			numClick = 0;
@@ -85,10 +100,13 @@ public class ControladorTabuleiro  implements MouseListener {
 				tabuleiro.removePeca(velhoX, velhoY);
 				frame.painelTabuleiro.repaint();
 				System.out.println("peca movida1 = "+pecaPrimeiroClick.getTipo()+ " 1 = branco ["+posX+"]["+posY+"]");
+				p.MovimentosPermitidos(posX, posY, tabuleiro);
 			}
 			
 			// se a peca percorrer uma posicao nao vazia, tem q testar o movimento e o peao precisa saber se e o primeiro movimento ou nao
-			
+			else if (tabuleiro.LocalizaPeca(posX, posY) != null) {
+				
+			}
 		}
 					
 	}
@@ -118,6 +136,7 @@ public class ControladorTabuleiro  implements MouseListener {
 				System.out.println("peca apertada = "+peca.getTipo()+ " Cor peca: Preta["+posX+"]["+posY+"]");
 		}	}
 	}
+	
 	public Pecas CriaPeca(int lin, int col, TipoPeca tipo, int cor)
 	{	
 		Pecas p = null;
@@ -143,17 +162,7 @@ public class ControladorTabuleiro  implements MouseListener {
 	
 		
 	}
-/*	boolean isInCheckMate(Tabuleiro board) {
-		
-	}
-	
-	boolean isInCheck(ChessBoard board, int player) {
-		
-	}
-	
-	boolean isInStalemate(ChessBoard board, int player) {
-		
-	}*/
+
 	public void mouseEntered(MouseEvent e) {		
 	}
 	public void mouseExited(MouseEvent e) {		

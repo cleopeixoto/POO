@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 
 
+@SuppressWarnings("unused")
 public class TabuleiroPainel extends JPanel{
 
 	/**
@@ -27,11 +28,13 @@ public class TabuleiroPainel extends JPanel{
 	
 	public static final int TXT_X=800;
 	public static final int TXT_Y=800;
-	public static int tam = 100;
+	public static int tam = 75;
 	private Rectangle2D quadrados = new Rectangle2D.Double();
 	private Tabuleiro tabuleiro ;
 	private int lin = 8;
 	private int col = 8 ;
+	
+	
 	public TabuleiroPainel(Tabuleiro NovoTabuleiro) {
 		tabuleiro = NovoTabuleiro;
 	}

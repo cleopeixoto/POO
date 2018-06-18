@@ -18,7 +18,6 @@ public class Posicoes {
 		
 		
 		public int getX(){
-			
 			return xPos;	
 		}
 		

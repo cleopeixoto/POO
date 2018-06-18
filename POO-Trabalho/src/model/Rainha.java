@@ -7,10 +7,9 @@ import javax.imageio.ImageIO;
 
 public class Rainha extends Pecas{
 	
-	public Rainha(int PecaLin, int PecaCol, int PecaCor)
-	{
-		lin = PecaLin;
-		col = PecaCol;
+	public Rainha(int x, int y, int PecaCor) {
+		lin = x;
+		col = y;
 		cor = PecaCor;
 		try {
 			
@@ -29,9 +28,9 @@ public class Rainha extends Pecas{
 	}
 	
 	public TipoPeca getTipo() {
-		 
 		return TipoPeca.Rainha;
 	 }
+
 	
 	// seus movimentos sao o do bispo + o da torre
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro){
@@ -242,3 +241,4 @@ public class Rainha extends Pecas{
 			
 	    }
 }
+

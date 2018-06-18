@@ -7,10 +7,9 @@ import javax.imageio.ImageIO;
 
 public class Rei extends Pecas {
 	
-	public Rei(int PecaLin, int PecaCol, int PecaCor)
-	{
-		lin = PecaLin;
-		col = PecaCol;
+	public Rei(int x, int y, int PecaCor) {
+		lin = x;
+		col = y;
 		cor = PecaCor;
 		try {
 			
@@ -27,6 +26,12 @@ public class Rei extends Pecas {
 			System.exit(1);
 		}
 	}
+	
+	 public TipoPeca getTipo() {
+		 
+		return TipoPeca.Rei;
+	 }
+
 	
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 
@@ -57,10 +62,6 @@ public class Rei extends Pecas {
 	        else
 	            return false;
 	 }
-	 
-	 public TipoPeca getTipo(){
-		 
-		return TipoPeca.Rei;
-	 }
 
 }
+

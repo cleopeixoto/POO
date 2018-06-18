@@ -9,10 +9,9 @@ import javax.imageio.ImageIO;
 public class Torre extends Pecas {
 	
 
-	public Torre(int PecaLin, int PecaCol, int PecaCor)
-	{
-		lin = PecaLin;
-		col = PecaCol;
+	public Torre(int x, int y, int PecaCor) {
+		lin = x;
+		col = y;
 		cor = PecaCor;
 		try {
 		
@@ -30,6 +29,13 @@ public class Torre extends Pecas {
 			System.exit(1);
 		}
 	}
+
+	public TipoPeca getTipo() {
+		 
+		return TipoPeca.Torre;
+
+	 }
+	 
 	
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 		 
@@ -127,14 +133,6 @@ public class Torre extends Pecas {
 	        }
 			
 	    }
-
-
-	 
-	 public TipoPeca getTipo() {
-		 
-		return TipoPeca.Torre;
-
-	 }
 	 
 	 public Vector<Posicoes> VetorMovimentos(Tabuleiro tabuleiro) {
 		 Vector<Posicoes> pos = new Vector<Posicoes>();
@@ -146,8 +144,5 @@ public class Torre extends Pecas {
 	            }
 	        }
 	        return pos;
-	}
-
-
-	
+	}	
 }

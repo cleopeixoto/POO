@@ -5,15 +5,13 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Vector;
 
-
-
-public class Bispo extends Pecas{
+public class Bispo extends Pecas {
 	
-	public Bispo(int PecaLin, int PecaCol, int PecaCor)
-	{
-		lin = PecaLin;
-		col = PecaCol;
-		cor = PecaCor;
+	public Bispo (int x, int y, int corPeca) {
+		lin = x;
+		col = y;
+		cor = corPeca;
+		
 		try {
 			
 			if (cor == 1) {
@@ -31,9 +29,9 @@ public class Bispo extends Pecas{
 	}
 	
 	
-	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro){
+	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 
-			 if(this.lin == PecaLin || this.col == PecaCol )
+			 if (this.lin == PecaLin || this.col == PecaCol )
 					return false;
 
 			 int direcao = obtemDirecao(PecaLin, PecaCol);
