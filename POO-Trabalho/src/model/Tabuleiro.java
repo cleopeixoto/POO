@@ -7,7 +7,7 @@ public class Tabuleiro {
 	
 	public static final int Tam_Tabuleiro = 8;
 	public Pecas[][] tabuleiro = new Pecas[Tam_Tabuleiro][Tam_Tabuleiro];
-	
+	 
 	public Tabuleiro tab;
 	
 	public Tabuleiro()

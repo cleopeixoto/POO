@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 
 public class Rei extends Pecas {
 	
-	boolean pecaMovida = false;
+	boolean pecaMovida = false; 
 	
 	public boolean getPecaMovida () {
 		return pecaMovida;
