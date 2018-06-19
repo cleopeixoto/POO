@@ -14,26 +14,37 @@ import model.TipoPeca;
 
 import view.TabuleiroFrame;
 import view.TabuleiroPainel;
+import view.ObservaSujeito;
+import view.Sujeito;
 
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
-//import java.util.Observable;
-//import java.util.Observer;
 
-public class ControladorTabuleiro  implements MouseListener {
+public class ControladorTabuleiro implements MouseListener, Sujeito {
 	
-	private TabuleiroFrame frame;
-	Tabuleiro tabuleiro;
+	TabuleiroFrame frame;
+	private Tabuleiro tabuleiro;
 	
 	private int alturaFrame, alturaQuadrado,larguraFrame,larguraQuadrado;
 	private int posX, posY, velhoX, velhoY;
 	private int numClick = 0;
-	public Pecas pecaPrimeiroClick;
-	public Vector<Posicoes> posicoesPossiveisP1;
+	private Pecas pecaPrimeiroClick;
+	private Vector<Posicoes> posicoesPossiveisP1;
+	private ArrayList<ObservaSujeito> listaObservadores;
+	
+	
+	private static ControladorTabuleiro controlador = null;
 	// controlador cria o tabuleiro e a frame
-	public ControladorTabuleiro() {
+	private ControladorTabuleiro() {
 		
 	tabuleiro = new Tabuleiro();
 	frame = new TabuleiroFrame(tabuleiro);
@@ -42,7 +53,15 @@ public class ControladorTabuleiro  implements MouseListener {
 	frame.setLocationRelativeTo( null );
 	frame.setVisible(true);	
 	frame.addMouseListener(this);
+	listaObservadores = new ArrayList<ObservaSujeito>();
 	
+	}
+	
+	public static ControladorTabuleiro getControladorTabuleiro() {
+		if (controlador == null) {
+			controlador = new ControladorTabuleiro();
+		}
+		return controlador;
 	}
 
 	
@@ -70,7 +89,8 @@ public class ControladorTabuleiro  implements MouseListener {
 			pecaPrimeiroClick = tabuleiro.LocalizaPeca(posX, posY);
 			posicoesPossiveisP1 = pecaPrimeiroClick.VetorMovimentos(tabuleiro);
 			frame.painelTabuleiro.posicoesPermitidas(posicoesPossiveisP1);
-			frame.painelTabuleiro.repaint();
+			notificaObservers();
+			//frame.painelTabuleiro.repaint();
 			
 			// salvando a posicao antiga obter o novo click
 			
@@ -89,7 +109,8 @@ public class ControladorTabuleiro  implements MouseListener {
 			if( pecaPrimeiroClick.MovimentosPermitidos(posX, posY, tabuleiro) == false) {
 				numClick = 0;
 				System.out.println("click INVALIDO , numero click "+ numClick);
-				frame.painelTabuleiro.repaint();
+				notificaObservers();
+				//frame.painelTabuleiro.repaint();
 				
 			}
 			// movimento eh valido
@@ -99,7 +120,8 @@ public class ControladorTabuleiro  implements MouseListener {
 				tabuleiro.addPeca(p);
 			//	pecaPrimeiroClick.Mover(10,10); //invalida a peca
 				tabuleiro.removePeca(velhoX, velhoY);
-				frame.painelTabuleiro.repaint();
+				notificaObservers();
+				//frame.painelTabuleiro.repaint();
 				System.out.println("peca movida1 = "+pecaPrimeiroClick.getTipo()+ " 1 = branco ["+posX+"]["+posY+"]");
 				//reseta o clique
 				numClick = 0;
@@ -132,7 +154,8 @@ public class ControladorTabuleiro  implements MouseListener {
 					pecaPrimeiroClick = tabuleiro.LocalizaPeca(posX, posY);
 					posicoesPossiveisP1 = pecaPrimeiroClick.VetorMovimentos(tabuleiro);
 					frame.painelTabuleiro.posicoesPermitidas(posicoesPossiveisP1);
-					frame.painelTabuleiro.repaint();
+					notificaObservers();
+					//		frame.painelTabuleiro.repaint();
 					
 					// salvando a posicao antiga obter o novo click
 					
@@ -151,8 +174,8 @@ public class ControladorTabuleiro  implements MouseListener {
 					tabuleiro.addPeca(p);
 					// removo a peca da sua posicao antiga
 					tabuleiro.removePeca(velhoX, velhoY);
-
-					frame.painelTabuleiro.repaint();
+					notificaObservers();
+					//frame.painelTabuleiro.repaint();
 					System.out.println("peca movida1 = "+pecaPrimeiroClick.getTipo()+ " 1 = branco ["+posX+"]["+posY+"]");
 					numClick = 0;
 					
@@ -160,11 +183,7 @@ public class ControladorTabuleiro  implements MouseListener {
 				}
 			}
 		}
-			
-		
-					
-	
-	
+
 	public void localizaQuadrado(int x, int y) {
 		
 		alturaFrame = frame.getHeight();
@@ -190,6 +209,7 @@ public class ControladorTabuleiro  implements MouseListener {
 				System.out.println("peca apertada = "+peca.getTipo()+ " Cor peca: Preta["+posX+"]["+posY+"]");
 		}	}
 	}
+	
 	public Pecas CriaPeca(int lin, int col, TipoPeca tipo, int cor)
 	{	
 		Pecas p = null;
@@ -215,17 +235,11 @@ public class ControladorTabuleiro  implements MouseListener {
 	
 		
 	}
-/*	boolean isInCheckMate(Tabuleiro board) {
-		
-	}
 	
-	boolean isInCheck(ChessBoard board, int player) {
-		
-	}
 	
-	boolean isInStalemate(ChessBoard board, int player) {
-		
-	}*/
+
+	
+
 	public void mouseEntered(MouseEvent e) {		
 	}
 	public void mouseExited(MouseEvent e) {		
@@ -234,5 +248,32 @@ public class ControladorTabuleiro  implements MouseListener {
 	}
 	public void mouseReleased(MouseEvent e) {		
 	}
+
+	
+
+	@Override
+	public void notificaObservers() {
+		for (Iterator<ObservaSujeito> it = listaObservadores.iterator(); it.hasNext();)
+	        {
+			ObservaSujeito o = it.next();
+	            o.update();
+	        }
+		
+	}
+
+	@Override
+	public void addObserver(ObservaSujeito o) {
+		listaObservadores.add(o);
+		
+	}
+
+	@Override
+	public void removeObserver(ObservaSujeito o) {
+		listaObservadores.remove(listaObservadores.indexOf(o));
+		
+	}
+
+	
+
 
 }

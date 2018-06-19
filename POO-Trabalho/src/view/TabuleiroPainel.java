@@ -17,27 +17,32 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Vector;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class TabuleiroPainel extends JPanel{
+public class TabuleiroPainel extends JPanel implements ObservaSujeito{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final int TXT_X=600;
-	public static final int TXT_Y=600;
-	public static int tam = 75;
+	public static final int TXT_X=800;
+	public static final int TXT_Y=800;
+	public static int tam = 100;
 	private Rectangle2D quadrados = new Rectangle2D.Double();
 	private Tabuleiro tabuleiro ;
 	private int lin = 8;
 	private int col = 8 ;
 	private Vector<Posicoes> posicoesPossiveis ;
+	
+	
 	public TabuleiroPainel(Tabuleiro NovoTabuleiro) {
 		tabuleiro = NovoTabuleiro;
+
 	}
 
 	public void paintComponent(Graphics g) {
@@ -107,9 +112,6 @@ public class TabuleiroPainel extends JPanel{
 		
 	}
 	
-	//void draw(Tabuleiro board) {
-		 
-	// }
 
 	
 	public void QuadradoSelecionado(int lin, int col) {
@@ -132,6 +134,14 @@ public class TabuleiroPainel extends JPanel{
 	 void unselectAll() {
 		 
 	 }
+
+	
+	 public void update(){
+		 repaint();
+	}
+
+	
+		
 	
 	
 
