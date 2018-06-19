@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import model.Pecas;
+import model.Posicoes;
 import model.Tabuleiro;
 
 import java.awt.BasicStroke;
@@ -16,9 +17,10 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 
-@SuppressWarnings("unused")
 public class TabuleiroPainel extends JPanel{
 
 	/**
@@ -28,13 +30,12 @@ public class TabuleiroPainel extends JPanel{
 	
 	public static final int TXT_X=800;
 	public static final int TXT_Y=800;
-	public static int tam = 75;
+	public static int tam = 100;
 	private Rectangle2D quadrados = new Rectangle2D.Double();
 	private Tabuleiro tabuleiro ;
 	private int lin = 8;
 	private int col = 8 ;
-	
-	
+	private Vector<Posicoes> posicoesPossiveis ;
 	public TabuleiroPainel(Tabuleiro NovoTabuleiro) {
 		tabuleiro = NovoTabuleiro;
 	}
@@ -88,6 +89,22 @@ public class TabuleiroPainel extends JPanel{
 			
 		}
 		
+		if (posicoesPossiveis != null) {
+			
+			for (int i = 0; i < posicoesPossiveis.size(); i++) 
+			{
+				
+				quadrados.setRect( posicoesPossiveis.get(i).getX()*tam, posicoesPossiveis.get(i).getY()*tam,tam,tam);
+				g2d.setStroke(new BasicStroke(5)); //deixa o contorno mais grosso
+				g2d.setPaint(Color.blue);
+				g2d.draw(quadrados);
+				  
+			}
+			posicoesPossiveis = null;
+				
+			
+		}
+		
 	}
 	
 	//void draw(Tabuleiro board) {
@@ -101,6 +118,12 @@ public class TabuleiroPainel extends JPanel{
 		     this.col = col;
 		 
 	 }
+	
+	public void posicoesPermitidas(Vector<Posicoes> posicoes) {
+		
+		posicoesPossiveis = posicoes;
+		
+	}
 	 
 	 void unselectSquare(int row, int col) {
 		 

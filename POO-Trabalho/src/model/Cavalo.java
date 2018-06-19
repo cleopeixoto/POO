@@ -8,9 +8,10 @@ import javax.imageio.ImageIO;
 
 public class Cavalo extends Pecas{
 	
-	 public Cavalo(int x, int y, int PecaCor) {
-		lin = x;
-		col = y;
+	 public Cavalo(int PecaLin, int PecaCol, int PecaCor)
+	 {
+		lin = PecaLin;
+		col = PecaCol;
 		cor = PecaCor;
 		try {
 			
@@ -27,13 +28,7 @@ public class Cavalo extends Pecas{
 			System.exit(1);
 		}
 	 }
-	 
-	 public TipoPeca getTipo() {
-		 
-			return TipoPeca.Cavalo;
-		}
-
-	 
+	
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 		
 		 	int adversario;
@@ -80,6 +75,11 @@ public class Cavalo extends Pecas{
 	        else
 	            return false;
 		}
+
+	 public TipoPeca getTipo() {
+		 
+		return TipoPeca.Cavalo;
+	 }
 	 
 	 private boolean helperMovimento(Posicoes inicio,Posicoes fim, int adversario, Tabuleiro tabuleiro)
 	 {
@@ -104,5 +104,4 @@ public class Cavalo extends Pecas{
 	        }
 	        return pos;
 	}
-	 
 }

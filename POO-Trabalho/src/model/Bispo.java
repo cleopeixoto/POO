@@ -5,13 +5,15 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Vector;
 
-public class Bispo extends Pecas {
+
+
+public class Bispo extends Pecas{
 	
-	public Bispo (int x, int y, int corPeca) {
-		lin = x;
-		col = y;
-		cor = corPeca;
-		
+	public Bispo(int PecaLin, int PecaCol, int PecaCor)
+	{
+		lin = PecaLin;
+		col = PecaCol;
+		cor = PecaCor;
 		try {
 			
 			if (cor == 1) {
@@ -29,9 +31,9 @@ public class Bispo extends Pecas {
 	}
 	
 	
-	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
+	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro){
 
-			 if (this.lin == PecaLin || this.col == PecaCol )
+			 if(this.lin == PecaLin || this.col == PecaCol )
 					return false;
 
 			 int direcao = obtemDirecao(PecaLin, PecaCol);
@@ -46,6 +48,7 @@ public class Bispo extends Pecas {
 			else if (this.cor == preto){
 				return VerificaPosicoes(inicio, fim, branco, direcao, tabuleiro, 0);
 			}
+			
 			return true;
     }
 	 
@@ -75,13 +78,13 @@ public class Bispo extends Pecas {
 	 // qtdPeca = bispo nao pode pular nenhuma peca
 	 private boolean VerificaPosicoes(Posicoes inicio, Posicoes fim, int adversario, int direcao, Tabuleiro tabuleiro, int qtdPeca){
 			
-			if( inicio.getX() == fim.getY() && inicio.getY() == fim.getY() && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
+			if( inicio.Igual(fim) && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
 				return true;
 			
-			else if(inicio.getX() == fim.getY() && inicio.getY() == fim.getY()  && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario)) 
+			else if(inicio.Igual(fim) && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario)) 
 				return true;
 			
-			else if(tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && qtdPeca > 0)
+			else if(tabuleiro.posicaoOcupada(inicio.getX(), inicio.getY()) && qtdPeca > 0)
 				return false;
 			
 			else

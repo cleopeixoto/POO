@@ -2,14 +2,16 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
 public class Rei extends Pecas {
 	
-	public Rei(int x, int y, int PecaCor) {
-		lin = x;
-		col = y;
+	public Rei(int PecaLin, int PecaCol, int PecaCor)
+	{
+		lin = PecaLin;
+		col = PecaCol;
 		cor = PecaCor;
 		try {
 			
@@ -26,12 +28,6 @@ public class Rei extends Pecas {
 			System.exit(1);
 		}
 	}
-	
-	 public TipoPeca getTipo() {
-		 
-		return TipoPeca.Rei;
-	 }
-
 	
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 
@@ -62,6 +58,22 @@ public class Rei extends Pecas {
 	        else
 	            return false;
 	 }
+	 
+	 public TipoPeca getTipo(){
+		 
+		return TipoPeca.Rei;
+	 }
+	 
+	 public Vector<Posicoes> VetorMovimentos(Tabuleiro tabuleiro) {
+		 Vector<Posicoes> pos = new Vector<Posicoes>();
+
+	        for(int i = 0; i < 8;i++ ){
+	            for(int j = 0; j < 8;j++){
+	                if( MovimentosPermitidos(i, j,tabuleiro))
+	                    pos.add(new Posicoes(i, j));
+	            }
+	        }
+	        return pos;
+	}
 
 }
-

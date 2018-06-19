@@ -9,9 +9,10 @@ import javax.imageio.ImageIO;
 public class Torre extends Pecas {
 	
 
-	public Torre(int x, int y, int PecaCor) {
-		lin = x;
-		col = y;
+	public Torre(int PecaLin, int PecaCol, int PecaCor)
+	{
+		lin = PecaLin;
+		col = PecaCol;
 		cor = PecaCor;
 		try {
 		
@@ -29,23 +30,15 @@ public class Torre extends Pecas {
 			System.exit(1);
 		}
 	}
-
-	public TipoPeca getTipo() {
-		 
-		return TipoPeca.Torre;
-
-	 }
-	 
 	
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 		 
-		    if(this.lin != PecaLin && this.col != PecaCol) {
+		    if(this.lin != PecaLin && this.col != PecaCol) 
 		    	return false;
-		    }
 	            
-	        else if(this.lin == PecaLin && this.col == PecaCol) {
-	        	 return false;
-	        }
+	        else if(this.lin == PecaLin && this.col == PecaCol)
+	        	return false;
+	        
 	           
 
 	        int direcao = obtemDirecao(PecaLin, PecaCol);
@@ -53,7 +46,7 @@ public class Torre extends Pecas {
 	        Posicoes fim = new Posicoes(PecaLin, PecaCol);
 	        
 
-	        //white bishop
+	        
 	        if(this.cor == branco)
 	        {
 	            return VerificaPosicoes(inicio, fim,preto, direcao, tabuleiro, 0);
@@ -69,14 +62,14 @@ public class Torre extends Pecas {
 	        
 	 }
 	 
-	 private int obtemDirecao(int PecaLin, int PecaCol)
-	    {	
+	 private int obtemDirecao(int PecaLin, int PecaCol){	
 		    //direita
 	        if(PecaLin > this.lin)
 	            return 1; 
 	        //esquerda
 	        else if(PecaLin < this.lin)
 	            return 3; 
+	        //mesma linha
 	        else
 	        {  
 	        	//para baixo
@@ -90,11 +83,11 @@ public class Torre extends Pecas {
 	 
 	 private boolean VerificaPosicoes(Posicoes inicio, Posicoes fim, int adversario, int direcao, Tabuleiro tabuleiro, int qtdPeca){
 
-	        if( inicio.getX() == fim.getY() && inicio.getY() == fim.getY() && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
+	        if( inicio.Igual(fim) && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
 	            return true;
-	        else if(inicio.getX() == fim.getY() && inicio.getY() == fim.getY()  && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario))
+	        else if(inicio.Igual(fim) && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario))
 	            return true;
-	        else if(tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && qtdPeca > 0)
+	        else if(tabuleiro.posicaoOcupada(inicio.getX(), inicio.getY()) && qtdPeca > 0)
 	            return false;
 	        else
 	        {	
@@ -133,6 +126,14 @@ public class Torre extends Pecas {
 	        }
 			
 	    }
+
+
+	 
+	 public TipoPeca getTipo() {
+		 
+		return TipoPeca.Torre;
+
+	 }
 	 
 	 public Vector<Posicoes> VetorMovimentos(Tabuleiro tabuleiro) {
 		 Vector<Posicoes> pos = new Vector<Posicoes>();
@@ -144,5 +145,8 @@ public class Torre extends Pecas {
 	            }
 	        }
 	        return pos;
-	}	
+	}
+
+
+	
 }

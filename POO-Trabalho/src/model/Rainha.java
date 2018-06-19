@@ -2,14 +2,16 @@ package model;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
 public class Rainha extends Pecas{
 	
-	public Rainha(int x, int y, int PecaCor) {
-		lin = x;
-		col = y;
+	public Rainha(int PecaLin, int PecaCol, int PecaCor)
+	{
+		lin = PecaLin;
+		col = PecaCol;
 		cor = PecaCor;
 		try {
 			
@@ -28,9 +30,9 @@ public class Rainha extends Pecas{
 	}
 	
 	public TipoPeca getTipo() {
+		 
 		return TipoPeca.Rainha;
 	 }
-
 	
 	// seus movimentos sao o do bispo + o da torre
 	 public boolean MovimentosPermitidos(int PecaLin, int PecaCol, Tabuleiro tabuleiro){
@@ -66,12 +68,13 @@ public class Rainha extends Pecas{
 		else if (this.cor == preto){
 			return VerificaPosicoesBispo(inicio, fim, branco, direcao, tabuleiro, 0);
 		}
+		
 		return true;
 	 }
 	 
 	 private int obtemDirecaoBispo(int PecaLin, int PecaCol) {
 			
-		 	if(PecaLin > this.lin){
+		 if(PecaLin > this.lin){
 				//desce para direita
 				if(PecaCol > this.col){
 					return 2;
@@ -96,13 +99,13 @@ public class Rainha extends Pecas{
 	// qtdPeca = bispo nao pode pular nenhuma peca
 	 private boolean VerificaPosicoesBispo(Posicoes inicio, Posicoes fim, int adversario, int direcao, Tabuleiro tabuleiro, int qtdPeca){
 				
-			if( inicio.getX() == fim.getY() && inicio.getY() == fim.getY() && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
+		 if( inicio.Igual(fim) && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
 				return true;
 			
-			else if(inicio.getX() == fim.getY() && inicio.getY() == fim.getY()  && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario)) 
+			else if(inicio.Igual(fim) && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario)) 
 				return true;
 			
-			else if(tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && qtdPeca > 0)
+			else if(tabuleiro.posicaoOcupada(inicio.getX(), inicio.getY()) && qtdPeca > 0)
 				return false;
 			
 			else
@@ -147,13 +150,12 @@ public class Rainha extends Pecas{
 
 	 private boolean MovimentosPermitidosTorre(int PecaLin, int PecaCol, Tabuleiro tabuleiro) {
 		 
-		    if(this.lin != PecaLin && this.col != PecaCol) {
+		 if(this.lin != PecaLin && this.col != PecaCol) 
 		    	return false;
-		    }
 	            
-	        else if(this.lin == PecaLin && this.col == PecaCol) {
-	        	 return false;
-	        }
+	        else if(this.lin == PecaLin && this.col == PecaCol)
+	        	return false;
+	        
 	           
 
 	        int direcao = obtemDirecaoTorre(PecaLin, PecaCol);
@@ -161,7 +163,7 @@ public class Rainha extends Pecas{
 	        Posicoes fim = new Posicoes(PecaLin, PecaCol);
 	        
 
-	        //white bishop
+	        
 	        if(this.cor == branco)
 	        {
 	            return VerificaPosicoesTorre(inicio, fim,preto, direcao, tabuleiro, 0);
@@ -172,18 +174,16 @@ public class Rainha extends Pecas{
 	        }
 	        
 	        return true;
-
-
-	        
 	 }
 	 
 	 private int obtemDirecaoTorre(int PecaLin, int PecaCol){	
-		    //direita
+		 //direita
 	        if(PecaLin > this.lin)
 	            return 1; 
 	        //esquerda
 	        else if(PecaLin < this.lin)
 	            return 3; 
+	        //mesma linha
 	        else
 	        {  
 	        	//para baixo
@@ -197,11 +197,11 @@ public class Rainha extends Pecas{
 	 
 	 private boolean VerificaPosicoesTorre(Posicoes inicio, Posicoes fim, int adversario, int direcao, Tabuleiro tabuleiro, int qtdPeca){
 
-	        if( inicio.getX() == fim.getY() && inicio.getY() == fim.getY() && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
+		 	if( inicio.Igual(fim) && !tabuleiro.posicaoOcupada(fim.getX(), fim.getY()))
 	            return true;
-	        else if(inicio.getX() == fim.getY() && inicio.getY() == fim.getY()  && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario))
+	        else if(inicio.Igual(fim) && tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && (tabuleiro.LocalizaPeca(fim.getX(), fim.getY()).getColor() == adversario))
 	            return true;
-	        else if(tabuleiro.posicaoOcupada(fim.getX(), fim.getY()) && qtdPeca > 0)
+	        else if(tabuleiro.posicaoOcupada(inicio.getX(), inicio.getY()) && qtdPeca > 0)
 	            return false;
 	        else
 	        {	
@@ -240,5 +240,16 @@ public class Rainha extends Pecas{
 	        }
 			
 	    }
-}
 
+	 public Vector<Posicoes> VetorMovimentos(Tabuleiro tabuleiro) {
+		 Vector<Posicoes> pos = new Vector<Posicoes>();
+
+	        for(int i = 0; i < 8;i++ ){
+	            for(int j = 0; j < 8;j++){
+	                if( MovimentosPermitidos(i, j,tabuleiro))
+	                    pos.add(new Posicoes(i, j));
+	            }
+	        }
+	        return pos;
+	}
+}

@@ -18,11 +18,20 @@ public class Posicoes {
 		
 		
 		public int getX(){
+			
 			return xPos;	
 		}
 		
 		public int  getY(){	
 			return yPos;	
+		}
+		
+		public boolean Igual(Posicoes p)
+		{
+			if(xPos == p.getX() && yPos == p.getY())
+				return true;
+			else
+				return false;	
 		}
 		
 		

@@ -1,28 +1,22 @@
 package model;
 
-//import view.Observer;
-//import model.Movimento;
-import model.Pecas;
-
 public class Tabuleiro {
 	
 	public static final int Tam_Tabuleiro = 8;
 	public Pecas[][] tabuleiro = new Pecas[Tam_Tabuleiro][Tam_Tabuleiro];
-	private int[][] casas = new int[8][8];
-	private Pecas[][] posicoes = new Pecas[8][8];
 	
-	protected Pecas conteudo;
-	
-	public Tabuleiro() {
-		for(int i = 0; i < Tam_Tabuleiro; i++) {
-				for(int j = 0; j <Tam_Tabuleiro; j++) {
+	public Tabuleiro()
+	{
+			for(int i = 0; i < Tam_Tabuleiro; i++)
+			{
+				for(int j = 0; j <Tam_Tabuleiro; j++){
 		                tabuleiro[i][j] = null;
-				}
-		}
-		InicializaPecas();
-		
+		        }
+		     }
+			
+			InicializaPecas();
 	}
-		
+	
 	 private void InicializaPecas() {
 		 // Posiciona as Pecas do xadrez
 		 
@@ -58,8 +52,8 @@ public class Tabuleiro {
 	        }
 
 	 }
-	 
-	public Pecas LocalizaPeca(int lin, int col) {
+	public Pecas LocalizaPeca(int lin, int col)
+	{
 		if (tabuleiro[lin][col] == null)
 			return null ;
 					
@@ -68,34 +62,22 @@ public class Tabuleiro {
 		}
 			
 	}
-	
-	public void addPeca(Pecas peca) {
+	public void addPeca(Pecas peca)
+	{
 		tabuleiro[peca.lin][peca.col] = peca;
 		
 	}
-	public void removePeca(int lin, int col) {
+	public void removePeca(int lin, int col)
+	{
 		tabuleiro[lin][col] = null;
 		return;
 	}
-	
 	public boolean posicaoOcupada(int lin, int col) {
 		if (tabuleiro[lin][col] == null)
 			return false;
 		else
 			return true;
 		
-	}
-	
-	public Pecas[][] getPecas(){
-		return this.posicoes;
-	}
-
-	public int[][] getCasas(){
-		return this.casas;
-	}
-	
-	public Pecas getConteudoPeca () {
-		return conteudo;
 	}
 
 }
