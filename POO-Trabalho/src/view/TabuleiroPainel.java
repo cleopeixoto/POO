@@ -39,9 +39,9 @@ public class TabuleiroPainel extends JPanel implements ObservaSujeito, ActionLis
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	public static final int TXT_X=800;
-	public static final int TXT_Y=800;
-	public static int tam = 100;
+	public static final int TXT_X=600;
+	public static final int TXT_Y=600;
+	public static int tam = 75;
 	private Rectangle2D quadrados = new Rectangle2D.Double();
 	private Tabuleiro tabuleiro ;
 	private int lin = 8;
