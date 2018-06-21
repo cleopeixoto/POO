@@ -37,11 +37,13 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 	private Tabuleiro tabuleiro;
 	private int repintar = 1;
 	private int promocaoPeao = 2;
+	private int XequeMateBranco = 3, XequeMatePreto = 4, congelamento = 5;
 	private int alturaFrame, alturaQuadrado,larguraFrame,larguraQuadrado;
 	private int posX, posY, velhoX, velhoY;
 	private int numClick = 0;
+	private boolean ReiXeque;
 	private Pecas pecaPrimeiroClick,pecaSegundoClick;
-	private Vector<Posicoes> posicoesPossiveisP1;
+	private Vector<Posicoes> posicoesPossiveis;
 	private ArrayList<ObservaSujeito> listaObservadores;
 
 	
@@ -50,6 +52,7 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 	private ControladorTabuleiro() {
 		
 	tabuleiro = new Tabuleiro();
+	tabuleiro.TabuleiroInicializar();
 	frame = new TabuleiroFrame(tabuleiro);
 	frame.pack();
 	frame.setResizable(true);
@@ -66,12 +69,17 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 		}
 		return controlador;
 	}
+	 
+	public static void EncerraControladorTabuleiro() {
+		controlador = null;
+	}
 
 	
 	public void mouseClicked(MouseEvent e) {
 		
 		//transformar a frame nos quadrados
 		localizaQuadrado(e.getX(),e.getY());
+		
 		
 		// primeiro click so é validado quando clica numa casa não vazia
 		
@@ -80,7 +88,7 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 			// existe peca, logo validamos o click 
 			
 			numClick++;
-			System.out.println("click valido , numero click"+ numClick);
+			System.out.println("click valido , numero click 0");
 			
 			// colorir o quadrado selecionado com uma nova cor
 			
@@ -90,8 +98,26 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 			// permitidas no tabuleiro
 			
 			pecaPrimeiroClick = tabuleiro.LocalizaPeca(posX, posY);
-			posicoesPossiveisP1 = pecaPrimeiroClick.VetorMovimentos(tabuleiro);
-			frame.painelTabuleiro.posicoesPermitidas(posicoesPossiveisP1);
+			// se o rei da peca estiver em xeque, vai obter as posicoes para retira-las
+			if ( tabuleiro.XequeRei(pecaPrimeiroClick.getColor()) ) {
+				
+				System.out.println("REI EM CHEQUE");
+				ReiXeque = true;
+				
+				posicoesPossiveis = pecaPrimeiroClick.VetorMovimentos(tabuleiro,true);
+				
+			}
+			else {
+				// verifico congelamento
+				if(tabuleiro.Congelamento(pecaPrimeiroClick.getColor(), tabuleiro)) {
+					
+					notificaObservers(congelamento);
+				}
+				ReiXeque = false;
+				posicoesPossiveis = pecaPrimeiroClick.VetorMovimentos(tabuleiro,false);
+			}
+			
+			frame.painelTabuleiro.posicoesPermitidas(posicoesPossiveis);
 			notificaObservers(repintar);
 		
 			
@@ -118,26 +144,27 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 			}
 			// movimento eh valido
 			else {
+				if (ReiXeque) {
+					if(!tabuleiro.VerificaJogadaXeque(pecaPrimeiroClick,posX, posY, tabuleiro)) {
 				
-				//--	PROMOCAO DO PEAO!
-				if (pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 1  && posY == 7 ||
-						pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 0  && posY == 0) {
-					notificaObservers(promocaoPeao);
-					notificaObservers(repintar);
+						Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
+						tabuleiro.addPeca(p);
+						tabuleiro.removePeca(velhoX, velhoY);
+					}
+				}
+				else {
+					//--	PROMOCAO DO PEAO!
+					if (pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 1  && posY == 7 ||
+							pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 0  && posY == 0) {
+						
+						notificaObservers(promocaoPeao);
+					}
+					
+					Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
+					tabuleiro.addPeca(p);
+					tabuleiro.removePeca(velhoX, velhoY);
 				}
 				
-				Pecas p = CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-				tabuleiro.addPeca(p);
-			
-				tabuleiro.removePeca(velhoX, velhoY);
-				//--	PROMOCAO DO PEAO!
-				if (pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 1  && posY == 7 ||
-						pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 0  && posY == 0) {
-					
-					notificaObservers(promocaoPeao);
-					
-					
-				}
 			
 				notificaObservers(repintar);
 				
@@ -157,6 +184,7 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 				//verifica se o movimento eh valido
 				if( pecaPrimeiroClick.MovimentosPermitidos(posX, posY, tabuleiro) == false) {
 					
+					//como se fosse o primeiro click
 					
 					numClick = 1;
 					System.out.println("click VALIDO , numero click "+ numClick);
@@ -169,8 +197,26 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 					// permitidas no tabuleiro
 					
 					pecaPrimeiroClick = tabuleiro.LocalizaPeca(posX, posY);
-					posicoesPossiveisP1 = pecaPrimeiroClick.VetorMovimentos(tabuleiro);
-					frame.painelTabuleiro.posicoesPermitidas(posicoesPossiveisP1);
+					// verifica se o rei esta em cheque
+					if ( tabuleiro.XequeRei(pecaPrimeiroClick.getColor()) ) {
+						
+						System.out.println("REI EM CHEQUE");
+						ReiXeque = true;
+						
+						posicoesPossiveis = pecaPrimeiroClick.VetorMovimentos(tabuleiro,true);
+						
+					}
+					else {
+						// verifico congelamento
+						if(tabuleiro.Congelamento(pecaPrimeiroClick.getColor(), tabuleiro)) {
+							
+							notificaObservers(congelamento);
+						}
+						
+						ReiXeque = false;
+						posicoesPossiveis = pecaPrimeiroClick.VetorMovimentos(tabuleiro,false);
+					}
+					frame.painelTabuleiro.posicoesPermitidas(posicoesPossiveis);
 					notificaObservers(repintar);
 				
 					
@@ -185,28 +231,56 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 				else {
 					
 					pecaSegundoClick = tabuleiro.LocalizaPeca(posX, posY);
-					// -- ROQUE
-					if( pecaPrimeiroClick.getTipo() == TipoPeca.Rei && pecaSegundoClick.getTipo() == TipoPeca.Torre && pecaPrimeiroClick.getColor() == pecaSegundoClick.getColor() ) {
-						Roque();
+					if(ReiXeque) {
+							if(!tabuleiro.VerificaJogadaXeque(pecaPrimeiroClick,posX, posY, tabuleiro)) {
+								
+								// retiro a peca que foi comida		
+								tabuleiro.removePeca(posX, posY);
+								// crio a peca antiga no novo local
+								Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
+								// add a nova peca a sua nova posicao
+								tabuleiro.addPeca(p);
+								// removo a peca da sua posicao antiga
+								tabuleiro.removePeca(velhoX, velhoY);
+								
+							}
 					}
-					
 					else {
-						// retiro a peca que foi comida		
-						tabuleiro.removePeca(posX, posY);
-						// crio a peca antiga no novo local
-						Pecas p = CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-						// add a nova peca a sua nova posicao
-						tabuleiro.addPeca(p);
-						// removo a peca da sua posicao antiga
-						tabuleiro.removePeca(velhoX, velhoY);
-						
-						//-- PROMOCAO DO PEAO!
-						if (pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 1  && posY == 7 ||
-								pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 0  && posY == 0) {
-								notificaObservers(promocaoPeao);
+							
+							// -- ROQUE
+							if( pecaPrimeiroClick.getTipo() == TipoPeca.Rei && pecaSegundoClick.getTipo() == TipoPeca.Torre && pecaPrimeiroClick.getColor() == pecaSegundoClick.getColor()) {
+								 tabuleiro.Roque(pecaPrimeiroClick, velhoX, velhoY, pecaSegundoClick, posX, posY, tabuleiro);
+								
+							}
+							
+							else {
+								
+							//XEQUE MATE	
+							if(pecaSegundoClick.getTipo() == TipoPeca.Rei && pecaPrimeiroClick.getColor() != pecaSegundoClick.getColor()) {
+								if (pecaPrimeiroClick.getColor() == 1)
+									notificaObservers(XequeMateBranco);
+								else
+									notificaObservers(XequeMatePreto);
+							}
+							// retiro a peca que foi comida		
+							tabuleiro.removePeca(posX, posY);
+							// crio a peca antiga no novo local
+							Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
+							// add a nova peca a sua nova posicao
+							tabuleiro.addPeca(p);
+							// removo a peca da sua posicao antiga
+							tabuleiro.removePeca(velhoX, velhoY);
+							
+							//-- PROMOCAO DO PEAO!
+							if (pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 1  && posY == 7 ||
+									pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 0  && posY == 0) {
+									notificaObservers(promocaoPeao);
+							}
 						}
+					}
 						
-						}
+						
+					
 					numClick = 0;
 					notificaObservers(repintar);
 						
@@ -221,72 +295,6 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 	
 		
 		
-	
-	public void Roque() {
-		 // rei branco 
-		if (pecaPrimeiroClick.getColor() == 1) {
-			
-			// torre da esquerda
-			if (pecaSegundoClick.getLin() == 0) {
-				
-				//remove torre
-				tabuleiro.removePeca(posX, posY);
-				// crio a peca antiga no novo local
-				Pecas p = CriaPeca(2,0,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-				// add a nova peca a sua nova posicao
-				tabuleiro.addPeca(p);
-				// removo a peca da sua posicao antiga
-				tabuleiro.removePeca(velhoX, velhoY);
-				
-				Pecas p2 = CriaPeca(3,0,pecaSegundoClick.getTipo(),pecaSegundoClick.getColor());
-				tabuleiro.addPeca(p2);
-			}
-			// torre a direita
-			else {
-				
-				tabuleiro.removePeca(posX, posY);
-				Pecas p = CriaPeca(6,0,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-				tabuleiro.addPeca(p);
-				tabuleiro.removePeca(velhoX, velhoY);
-				Pecas p2 = CriaPeca(5,0,pecaSegundoClick.getTipo(),pecaSegundoClick.getColor());
-				tabuleiro.addPeca(p2);
-				
-			}
-				
-		}
-		//peca preta
-		else {
-			
-			// torre da esquerda
-			if (pecaSegundoClick.getLin() == 0) {
-				
-				//remove torre
-				tabuleiro.removePeca(posX, posY);
-				// crio a peca antiga no novo local
-				Pecas p = CriaPeca(2,7,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-				// add a nova peca a sua nova posicao
-				tabuleiro.addPeca(p);
-				// removo a peca da sua posicao antiga
-				tabuleiro.removePeca(velhoX, velhoY);
-				
-				Pecas p2 = CriaPeca(3,7,pecaSegundoClick.getTipo(),pecaSegundoClick.getColor());
-				tabuleiro.addPeca(p2);
-			}
-			// torre a direita
-			else {
-				
-				tabuleiro.removePeca(posX, posY);
-				Pecas p = CriaPeca(6,7,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-				tabuleiro.addPeca(p);
-				tabuleiro.removePeca(velhoX, velhoY);
-				Pecas p2 = CriaPeca(5,7,pecaSegundoClick.getTipo(),pecaSegundoClick.getColor());
-				tabuleiro.addPeca(p2);
-				
-			}
-			
-		}
-	}
-
 	public void localizaQuadrado(int x, int y) {
 		
 		alturaFrame = frame.getHeight();
@@ -313,37 +321,12 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 		}	}
 	}
 	
-	public Pecas CriaPeca(int lin, int col, TipoPeca tipo, int cor)
-	{	
-		Pecas p = null;
-		if(tipo == TipoPeca.Torre) {
-			p = new Torre(lin, col,cor);
-		}
-		if(tipo == TipoPeca.Cavalo) {
-			p = new Cavalo(lin, col,cor);
-		}
-		if(tipo == TipoPeca.Bispo) {
-			p = new Bispo(lin, col,cor);
-		}
-		if(tipo == TipoPeca.Rei) {
-			p = new Rei(lin, col,cor);
-		}
-		if(tipo == TipoPeca.Rainha) {
-			p = new Rainha(lin, col,cor);
-		}
-		if(tipo == TipoPeca.Peao) {
-			p = new Peao(lin, col,cor);
-		}
-		return p;
-	
-		
-	}
 	
 	public void PromocaoPeao (TipoPeca tipo) {
 		
 		tabuleiro.removePeca(posX, posY);
 		if ( tipo != null) {
-			Pecas p3 = CriaPeca(posX,posY,tipo,pecaPrimeiroClick.getColor());
+			Pecas p3 = tabuleiro.CriaPeca(posX,posY,tipo,pecaPrimeiroClick.getColor());
 			tabuleiro.addPeca(p3);
 			numClick = 0;
 		}
@@ -353,7 +336,6 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 			
 		
 	}
-	
 
 	
 
@@ -365,10 +347,8 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 	}
 	public void mouseReleased(MouseEvent e) {		
 	}
-
 	
 
-	@Override
 	// 1- repaint na tela, 2- promocao do peao, popUp
 	public void notificaObservers(int i) {
 		for (Iterator<ObservaSujeito> it = listaObservadores.iterator(); it.hasNext();)
