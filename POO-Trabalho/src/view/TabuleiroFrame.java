@@ -23,16 +23,7 @@ public class TabuleiroFrame extends JFrame {
 	    
 	    public TabuleiroFrame(Tabuleiro NovoTabuleiro) {
 	    	
-	    	
-	    	Toolkit tk = Toolkit.getDefaultToolkit();
-	    	Dimension screenSize = tk.getScreenSize();
-	    	
-	    	int sl=screenSize.width;
-			int sa=screenSize.height;
-			int x1=sl/2- LARG_DEFAULT/2 ;
-			int y1=sa/2- ALT_DEFAULT/2 ;
-			
-			
+	    	   
 			
 			Dimension tamTabuleiro = new Dimension(LARG_DEFAULT, ALT_DEFAULT);
 	    	painelTabuleiro = new TabuleiroPainel(NovoTabuleiro);
@@ -42,10 +33,7 @@ public class TabuleiroFrame extends JFrame {
 			
 	    	setTitle("Xadrez");	
 			getContentPane().add(painelTabuleiro);
-			
-			
-			
-			
+
 		
 		}
 	    

@@ -202,7 +202,7 @@ public static boolean Salvar(){
     }
     
     private static TipoPeca VerificaPeca ( String s) {
-    	System.out.println("VERIFICA S   " + s );
+    
     	if( Objects.equals(s,"TorreBranca") ){
     		cor = 1;
     		return TipoPeca.Torre;

@@ -50,13 +50,13 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 	
 	private static ControladorTabuleiro controlador = null;
 	// controlador cria o tabuleiro e a frame
-	private ControladorTabuleiro(Tabuleiro loadTabuleiro) {
+	private ControladorTabuleiro(Tabuleiro tabuleiroCarregado) {
 		
 	tabuleiro = new Tabuleiro();
-	if (loadTabuleiro == null)
+	if (tabuleiroCarregado == null)
 		tabuleiro.TabuleiroInicializar();
 	else
-		tabuleiro.TabuleiroCarregar(loadTabuleiro);
+		tabuleiro.TabuleiroCarregar(tabuleiroCarregado);
 	frame = new TabuleiroFrame(tabuleiro);
 	frame.pack();
 	frame.setResizable(true);
@@ -67,9 +67,9 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 	
 	}
 	
-	public static ControladorTabuleiro getControladorTabuleiro(Tabuleiro loadTabuleiro) {
+	public static ControladorTabuleiro getControladorTabuleiro(Tabuleiro tabuleiroCarregado) {
 		if (controlador == null) {
-			controlador = new ControladorTabuleiro(loadTabuleiro);
+			controlador = new ControladorTabuleiro(tabuleiroCarregado);
 		}
 		return controlador;
 	}
