@@ -2,30 +2,22 @@ package controller;
 
 import model.Pecas;
 import model.Posicoes;
-import model.Bispo;
-import model.Rainha;
-import model.Rei;
-import model.Torre;
-import model.Cavalo;
-import model.Peao;
+
 
 import model.Tabuleiro;
 import model.TipoPeca;
 
 import view.TabuleiroFrame;
-import view.TabuleiroPainel;
+
 import view.ObservaSujeito;
 import view.Sujeito;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
+
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -264,9 +256,26 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 							if( pecaPrimeiroClick.getTipo() == TipoPeca.Rei && pecaSegundoClick.getTipo() == TipoPeca.Torre && pecaPrimeiroClick.getColor() == pecaSegundoClick.getColor()) {
 								 tabuleiro.Roque(pecaPrimeiroClick, velhoX, velhoY, pecaSegundoClick, posX, posY, tabuleiro);
 								
+								// retiro a peca que foi comida		
+									tabuleiro.removePeca(posX, posY);
+									// crio a peca antiga no novo local
+									Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
+									// add a nova peca a sua nova posicao
+									tabuleiro.addPeca(p);
+									// removo a peca da sua posicao antiga
+									tabuleiro.removePeca(velhoX, velhoY);
 							}
 							
 							else {
+								
+								// retiro a peca que foi comida		
+								tabuleiro.removePeca(posX, posY);
+								// crio a peca antiga no novo local
+								Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
+								// add a nova peca a sua nova posicao
+								tabuleiro.addPeca(p);
+								// removo a peca da sua posicao antiga
+								tabuleiro.removePeca(velhoX, velhoY);
 								
 							//XEQUE MATE	
 							if(pecaSegundoClick.getTipo() == TipoPeca.Rei && pecaPrimeiroClick.getColor() != pecaSegundoClick.getColor()) {
@@ -276,14 +285,6 @@ public class ControladorTabuleiro implements MouseListener, Sujeito {
 									notificaObservers(XequeMatePreto);
 								}
 							}
-							// retiro a peca que foi comida		
-							tabuleiro.removePeca(posX, posY);
-							// crio a peca antiga no novo local
-							Pecas p = tabuleiro.CriaPeca(posX,posY,pecaPrimeiroClick.getTipo(),pecaPrimeiroClick.getColor());
-							// add a nova peca a sua nova posicao
-							tabuleiro.addPeca(p);
-							// removo a peca da sua posicao antiga
-							tabuleiro.removePeca(velhoX, velhoY);
 							
 							//-- PROMOCAO DO PEAO!
 							if (pecaPrimeiroClick.getTipo() == TipoPeca.Peao && pecaPrimeiroClick.getColor() == 1  && posY == 7 ||

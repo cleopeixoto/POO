@@ -1,9 +1,5 @@
 package view;
 
-import javax.swing.JFrame;
-
-import javax.swing.WindowConstants;
-
 import controller.ControladorTabuleiro;
 import model.Tabuleiro;
 
