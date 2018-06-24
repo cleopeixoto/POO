@@ -19,7 +19,7 @@ public class Iniciar{
 	}
 	
 
-	public static void Iniciar() {
+	public static void Comecar() {
 		controlador = ControladorTabuleiro.getControladorTabuleiro(null);	
 	 	controlador.addObserver(controlador.frame.painelTabuleiro);
 		
@@ -28,8 +28,7 @@ public class Iniciar{
 	public static void ReIniciar() {
 		
 		controlador.EncerraControladorTabuleiro();
-		controlador = controlador.getControladorTabuleiro(null);	
-		controlador.addObserver(controlador.frame.painelTabuleiro);
+		frameIniciar = new TelaInicial();
 		
 	}
 
@@ -50,6 +49,8 @@ public class Iniciar{
 		
 		
 	}
+	
+	
 
 
 	

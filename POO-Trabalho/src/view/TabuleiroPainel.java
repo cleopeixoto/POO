@@ -202,6 +202,7 @@ public class TabuleiroPainel extends JPanel implements ObservaSujeito, ActionLis
 			if(entrada == JOptionPane.OK_OPTION)
 			{
 				System.out.println("CONGELAMENTO REINICIA JOGO");
+				ControladorTabuleiro.fecharFrame();
 				Iniciar.ReIniciar();
 			}
 		
@@ -223,6 +224,7 @@ public class TabuleiroPainel extends JPanel implements ObservaSujeito, ActionLis
 			if(entrada == JOptionPane.OK_OPTION)
 			{
 				System.out.println("REINICIA JOGO");
+				ControladorTabuleiro.fecharFrame();
 				Iniciar.ReIniciar();
 			}
 		

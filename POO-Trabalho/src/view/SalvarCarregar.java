@@ -31,6 +31,7 @@ public class SalvarCarregar {
 	
 private static int cor;
 public static Tabuleiro tabuleiroAux;
+public static int jogadorVez;
 	
 public static boolean Salvar(){
         
@@ -74,7 +75,7 @@ public static boolean Salvar(){
                 FileInputStream FIn = new FileInputStream(salvarArquivo.getAbsolutePath());
                 BufferedReader ArquivoLer = new BufferedReader(new InputStreamReader(FIn));
                 tabuleiroAux =  MontaTabuleiro(ArquivoLer);
-                Iniciar.Carregar(tabuleiroAux);
+                Iniciar.Carregar(tabuleiroAux);                
                 FIn.close();
                
             }
@@ -172,7 +173,7 @@ public static boolean Salvar(){
     	try {
 	    	while ((proximaLinha = b.readLine()) != null) {
 	    		s = (String)proximaLinha;
-	    		lin =  Integer.parseInt(b.readLine());
+    			lin =  Integer.parseInt(b.readLine());
 	    		col = Integer.parseInt(b.readLine());
 	    		tipo = VerificaPeca(s);
 	    		if ( tipo != null) {
@@ -181,7 +182,8 @@ public static boolean Salvar(){
 		    			cor = 3;
 		    			tabuleiro.addPeca(p);
 		    		}
-	    		}    
+	    		} 
+	    		
 	        }
 	    	return tabuleiro;
 	    	

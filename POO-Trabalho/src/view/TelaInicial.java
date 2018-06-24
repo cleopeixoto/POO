@@ -47,7 +47,7 @@ public class TelaInicial extends JFrame implements ActionListener {
 		        case "Novo Jogo":
 		        	System.out.println( " novo jogo" );
 		        	telaHome.dispose();
-		        	Iniciar.Iniciar();
+		        	Iniciar.Comecar();
 		            break;
 		        case "Carregar Jogo":
 		        	System.out.println( " Carregar" );
